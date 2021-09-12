@@ -1,0 +1,40 @@
+private const val mod = (1e9 + 7).toLong()
+private fun pow(a: Long, b: Long): Long {
+    var (a, b) = listOf(a, b)
+    var result = 1L
+    while (b > 0) {
+        if ((b and 1L) != 0L) {
+            result = result * a % mod
+        }
+ 
+        a = a * a % mod
+        b = b shr 1
+    }
+ 
+    return result
+}
+ 
+private const val N = (1e6).toInt()
+private val fact = Array(N + 5) { 0L }
+private val invFact = Array(N + 5) { 0L }
+private fun init() {
+ 
+    // making of fact arr...
+    fact[0] = 1
+    for (i in 1..N) {
+        fact[i] = 1L * i * fact[i - 1] % mod
+    }
+ 
+    // making of invFact arr...
+    invFact[N] = pow(fact[N], mod - 2L)
+    for (i in (N - 1) downTo 0) {
+        invFact[i] = 1L * (i + 1) * invFact[i + 1] % mod
+    }
+}
+ 
+private fun nCr(n: Int, r: Int): Long {
+    if (r > n || n < 0 || r < 0)
+        return 0L
+ 
+    return fact[n] * invFact[r] % mod * invFact[n - r] % mod
+}
